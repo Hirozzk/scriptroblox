@@ -307,29 +307,21 @@ end)
 -- Evento para copiar o link
 
 botaoCopiar.MouseButton1Click:Connect(function()
-
-    if setclipboard then
-
-        setclipboard(Config.LinkDoGrupo)
-
-        botaoCopiar.Text = Config.TextoBotaoCopiado
-
-        wait(2)
-
-        botaoCopiar.Text = Config.TextoBotaoCopiar
-
+    if syn and syn.open_url then
+        syn.open_url(Config.LinkDoGrupo)
+    elseif request then
+        request({Url = Config.LinkDoGrupo, Method = "GET"})
     else
-
-        warn("'setclipboard' não está disponível neste executor.")
-
+        warn("Não foi possível abrir o link automaticamente.")
         botaoCopiar.Text = "Erro!"
-
         wait(2)
-
         botaoCopiar.Text = Config.TextoBotaoCopiar
-
+        return
     end
 
+    botaoCopiar.Text = "Abrindo..."
+    wait(2)
+    botaoCopiar.Text = Config.TextoBotaoCopiar
 end)
 
 -- Efeitos de Hover para os botões
@@ -355,5 +347,6 @@ botaoFechar.MouseLeave:Connect(function() tweenFecharLeave:Play() end)
 -- Adiciona a GUI à tela do jogador
 
 screenGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
+
 
 print("GUI de Verificação de Grupo carregada com sucesso!")
